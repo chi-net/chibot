@@ -115,53 +115,38 @@ client.on('message.group', async (e) => {
       if (e.raw_message.indexOf('ys') !== -1 && e.raw_message.indexOf('玩') !== -1 && e.member.user_id === config.uin_numbers.chihuo) {
         e.group.sendMsg('@' + e.nickname + ' chihuo今天contribute了吗（\n你看人家dependabot都比你氵的勤快，还要玩ys\n发自chibot')
       } // for chihuo2104 ys
+      let name = ''
+      const uin = e.member.user_id
+      if (uin === config.uin_numbers.chihuo) {
+        name = 'chihuo'
+      } else if (uin === config.uin_numbers.lzy) {
+        name = 'lzy'
+      } else if (uin === config.uin_numbers.sci) {
+        name = 'sci'
+      } else if (uin === config.uin_numbers.mzw) {
+        name = 'mzw'
+      } else if (uin === config.uin_numbers.maomao) {
+        name = '猫猫'
+      } else if (uin === config.uin_numbers.so1ve) {
+        name = 'so1ve'
+      } else if (uin === config.uin_numbers.bots[0] || uin === config.uin_numbers.bots[2] || uin === config.uin_numbers.bots[3] || uin === config.uin_numbers.bots[1]) {
+        return
+      } else {
+        name = e.nickname
+      }
       if (e.raw_message.indexOf('鸟白岛') !== -1 || e.raw_message.indexOf('鳥白島') !== -1 || e.raw_message.indexOf('とりしろじま') !== -1) { // for maomao mzw lzy nbd
-        let name = ''
-        const uin = e.member.user_id
-        if (uin === config.uin_numbers.chihuo) {
-          name = 'chihuo'
-        } else if (uin === config.uin_numbers.lzy) {
-          name = 'lzy'
-        } else if (uin === config.uin_numbers.sci) {
-          name = 'sci'
-        } else if (uin === config.uin_numbers.mzw) {
-          name = 'mzw'
-        } else if (uin === config.uin_numbers.maomao) {
-          name = '猫猫'
-        } else if (uin === config.uin_numbers.so1ve) {
-          name = 'so1ve'
-        } else if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
+        if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
           e.group.sendMsg('@' + e.nickname + 'ydd大佬，您太巨了，竟然在玩鸟白岛')
           return
-        } else if (uin === config.uin_numbers.bots[0] || uin === config.uin_numbers.bots[2] || uin === config.uin_numbers.bots[3] || uin === config.uin_numbers.bots[1]) {
-          return
-        } else {
-          name = e.nickname
         }
         e.group.sendMsg('@' + e.nickname + ' ' + name + '今天contribute了吗，还玩鸟白岛\n发自chibot')
       }
       if ((e.raw_message.toLowerCase().indexOf('mc') !== -1 || e.raw_message.toLowerCase().indexOf('minecraft') !== -1) && (e.raw_message.indexOf('服') !== -1 || e.raw_message.indexOf('玩') !== -1)) { // for everyone mc
         let name = ''
         const uin = e.member.user_id
-        if (uin === config.uin_numbers.chihuo) {
-          name = 'chihuo'
-        } else if (uin === config.uin_numbers.lzy) {
-          name = 'lzy'
-        } else if (uin === config.uin_numbers.sci) {
-          name = 'sci'
-        } else if (uin === config.uin_numbers.mzw) {
-          name = 'mzw'
-        } else if (uin === config.uin_numbers.maomao) {
-          name = '猫猫'
-        } else if (uin === config.uin_numbers.so1ve) {
-          name = 'so1ve'
-        } else if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
+        if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
           e.group.sendMsg('@' + e.nickname + 'ydd大佬，您太巨了，竟然在玩mc')
           return
-        } else if (uin === config.uin_numbers.bots[0] || uin === config.uin_numbers.bots[2] || uin === config.uin_numbers.bots[3] || uin === config.uin_numbers.bots[1]) {
-          return
-        } else {
-          name = e.nickname
         }
         e.group.sendMsg('@' + e.nickname + ' ' + name + '今天contribute了吗，还玩mc\n发自chibot')
       }
