@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from './config'
-import { createClient } from 'oicq'
+import { createClient, segment } from 'oicq'
 
 const client = createClient(config.qqnumber, { platform: config.platform })
 
@@ -38,7 +38,7 @@ client.on('message.group', async (e) => {
             msg = 'cr,nmsmshsa'
             break
           case 'help':
-            msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:猫猫语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取猫猫网盘中的涩图(二次元美图)\n只要@chibot输入命令即可食用（'
+            msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n只要@chibot输入命令即可食用（\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
             break
           case 'maomaoquotes':
             const id = Math.floor(Math.random() * maomao_quotes.length)
@@ -100,6 +100,12 @@ client.on('message.group', async (e) => {
               msg = '发送请求时出现错误！'
             }
             break
+          case 'baiyuannekoshelp':
+              msg = '我是柏园猫，现在被高科技猫猫绑架，现在v下面这个二维码50，救我出来，等我出来一定让你当baiyuan works设计总监（x\n救救chihuo罢(bushi)\n'
+              const str = '@' + e.nickname + ' ' + msg
+              const res = await e.group.sendMsg([str , segment.image('payforbaiyuanneko.png')])
+              console.log(res)
+              break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
             break
