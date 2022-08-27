@@ -112,6 +112,7 @@ client.on('message.group', async (e) => {
           default:
             msg = '未知命令，请@chibot help查看命令列表'
         }
+        if (order === 'baiyuannekoshelp') return
         e.group.sendMsg('@' + e.nickname + ' ' + msg)
       } catch (error) {
         console.log(error)
