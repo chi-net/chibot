@@ -48,7 +48,7 @@ client.on('message.group', async (e) => {
             break
           case 'yddquotes':
             const id2 = Math.floor(Math.random() * yddquotes.length)
-            msg = '#' + (id2 + 1) + ':'+ ydd_quotes[id2]
+            msg = '#' + (id2 + 1) + ':'+ yddquotes[id2]
             break
           case 'geturl':
             try {
