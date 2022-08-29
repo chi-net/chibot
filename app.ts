@@ -17,6 +17,7 @@ client.on('message.group', async (e) => {
   if (e.group.group_id === config.group_number) { // 香子兰定制
     // const mynickname = (await e.group.getMemberMap(true)).get(client.uin)
     if (e.atme === true) {
+      if (e.sender.user_id === config.uin_numbers.bots[0] || e.sender.user_id === config.uin_numbers.bots[1] || e.sender.user_id === config.uin_numbers.bots[2]) return
       try {
         console.log(e.message[1].text.toString().split(' '))
         const order = e.message[1].text.toString().split(' ')[1] || ''
