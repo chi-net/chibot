@@ -56,5 +56,6 @@ export default [
   "racknerd...fxxkit 不如dedipath？",
   "并且...xtom...算了equ租地罢了",
   "pr是什么你还不清楚吗",
-  "或者mit请"
+  "或者mit请",
+  "我感觉我在装x 但是...我确实没有"
 ]
