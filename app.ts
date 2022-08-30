@@ -43,7 +43,8 @@ client.on('message.group', async (e) => {
             msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\nyddquotes:ydd大佬语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n只要@chibot输入命令即可食用（\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
             break
           case 'maomaoquotes':
-            const id = Math.floor(Math.random() * maomao_quotes.length)
+            // maomaoquotes为防止滥用更改为100
+            const id = Math.floor(Math.random() * 100)
             msg = '#' + (id + 1) + ':'+ maomao_quotes[id]
             break
           case 'yddquotes':
