@@ -44,7 +44,7 @@ client.on('message.group', async (e) => {
             break
           case 'maomaoquotes':
             // maomaoquotes为防止滥用更改为100
-            const id = Math.floor(Math.random() * 100)
+            const id = (e.sender.user_id === config.uin_numbers.chihuo) ? Math.floor(Math.random() * maomao_quotes.length) : Math.floor(Math.random() * 100)
             msg = '#' + (id + 1) + ':'+ maomao_quotes[id]
             break
           case 'yddquotes':
