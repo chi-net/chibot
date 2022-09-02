@@ -40,7 +40,7 @@ client.on('message.group', async (e) => {
             msg = 'cr,nmsmshsa'
             break
           case 'help':
-            msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\nyddquotes:ydd大佬语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n只要@chibot输入命令即可食用（\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
+            msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\nyddquotes:ydd大佬语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n贴贴:模仿柏园猫猫和猫猫bot(?\n只要@chibot输入命令即可食用（\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
             break
           case 'maomaoquotes':
             // maomaoquotes为防止滥用更改为100
@@ -113,6 +113,9 @@ client.on('message.group', async (e) => {
               const str = '@' + e.nickname + ' ' + msg
               const res = await e.group.sendMsg([str , segment.image('payforbaiyuanneko.png')])
               console.log(res)
+              break
+          case '贴贴':
+              msg = '贴贴'
               break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
