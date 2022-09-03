@@ -45,7 +45,9 @@ client.on('message.group', async (e) => {
           case 'maomaoquotes':
             // maomaoquotes为防止滥用更改为100
             //  const id = (e.sender.user_id === config.uin_numbers.chihuo) ? Math.floor(Math.random() * maomao_quotes.length) : Math.floor(Math.random() * 100)
-            const id =  Math.floor(Math.random() * 100)
+            // const id =  Math.floor(Math.random() * 100)
+            // 看在猫猫private feed和语音合成模型都没开源的情况下还是开猫猫语录全访问权（
+            const id = Math.floor(Math.random() * maomao_quotes.length)
             msg = '#' + (id + 1) + ':'+ maomao_quotes[id]
             break
           case 'yddquotes':
