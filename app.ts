@@ -115,7 +115,7 @@ client.on('message.group', async (e) => {
               console.log(res)
               break
           case '贴贴':
-              msg = '贴贴'
+              msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
               break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
