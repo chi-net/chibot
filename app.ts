@@ -1,31 +1,124 @@
 import axios from 'axios'
 import config from './config'
+import express from 'express'
+import sqlite3 from 'sqlite3'
+import sha256 from 'sha256'
 import { createClient, segment } from 'oicq'
+
+const db = new sqlite3.Database('./chibotapp.db')
+
+const app = express()
 
 const client = createClient(config.qqnumber, { platform: config.platform })
 
 const QWEATHER_KEY = config.QWEATHER_KEY
 
+// template chi le
+let le = 0
+let start = new Date().toLocaleString()
+
+app.get('/sendMsg', async (req, res) => {
+  try {
+    const group = client.pickGroup(req.query.groupid)
+    let pwdsha256 = sha256(req.query.pwd)
+    db.all('SELECT * FROM pwds WHERE uid = ' + req.query.sender, async (err, rows) => {
+      if (!err) {
+        if (rows.length === 0) {
+          res.status(400).end(JSON.stringify({ status: 400, error: 'Not set user password'}))
+        } else {
+          if (pwdsha256 === rows[0].pwd) {
+            await group.sendMsg(req.query.message + "\nchibot代发服务:本消息发送者为" + group.pickMember(parseInt(req.query.sender)).info?.nickname + '(' + req.query.sender + ')[已经经过认证]')
+            res.end(JSON.stringify({ status: 200, message: 'success'}))
+          } else {
+            res.status(400).end(JSON.stringify({ status: 400, error: 'Invaild password'}))
+          }
+        }
+      }
+    })
+  } catch (e) {
+    res.status(400).end(JSON.stringify({ status: 400, error: e}))
+  }
+})
+app.get('/getMsg', async (req, res) => {
+  db.all('SELECT * FROM messages', (err, rows) => {
+    if(!err) {
+      res.set('Content-Type','application/json;charset=utf8')
+      res.end(JSON.stringify({ status: 200, data: rows}))
+    }
+  })
+})
+app.listen(config.listen_port)
+
 client.on("system.login.slider", function (e) {
   console.log("输入ticket：")
   process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-}).login(config.password)
+})
+
+client.on("system.login.device", () => {
+  client.logger.mark("输入密保手机收到的短信验证码后按下回车键继续。");
+  client.sendSmsCode();
+  process.stdin.once("data", (input) => {
+    client.submitSmsCode(input.toString())
+  })
+})
+
+client.login(config.password)
 
 import maomao_quotes from './maomaoquotes'
 import yddquotes from './yddquotes'
 
+// let mq = ''
+// maomao_quotes.forEach(quote => mq += quote + ' ')
+// console.log(mq)
+
+client.on('system.online', async () => {
+  // client.sendGroupMsg(983538695, ([segment.at(1945872835 , 'ATRIbot', false), ' 贴贴']))
+  // client.sendGroupMsg(983538695, ([segment.at(2501157389 , '零れ桜', false), ' ' + ' 贴贴']))
+})
+
 client.on('message.group', async (e) => {
+  // 备份信息
+  if (e.group_id === config.group_number) {
+    db.run('INSERT INTO messages VALUES ("' + e.raw_message + '","' + e.nickname + '[' + e.sender.user_id + ']",' + e.time + ',' + e.group_id + ')', (err) => {
+      if (err) {
+        console.error(err)
+      }
+    })
+  }
+
   if (e.group.group_id === config.group_number) { // 香子兰定制
     // const mynickname = (await e.group.getMemberMap(true)).get(client.uin)
+    // chi：小东西
+    const GS = Math.random()
+    if (GS < 0.006) {
+      e.group.sendMsg(e.message)
+    }
+    if (GS > 0.006 && GS < 0.020) {
+      client.sendGroupMsg(983538695, ([segment.at(1945872835 , 'ATRIbot', false), ' 贴贴']))
+      e.group.sendMsg('可惜大家都说我SPAM和ABUSE 都不给我贴 呜呜呜')
+    }
+    if (GS > 0.020 && GS < 0.040) {
+      e.group.sendMsg('猫猫:')
+    }
     if (e.atme === true) {
-      if (e.sender.user_id === config.uin_numbers.bots[0] || e.sender.user_id === config.uin_numbers.bots[1] || e.sender.user_id === config.uin_numbers.bots[2]) return
+      // if (e.sender.user_id === config.uin_numbers.bots[0] || e.sender.user_id === config.uin_numbers.bots[1] || e.sender.user_id === config.uin_numbers.bots[2]) return
       try {
+        //@ts-ignore
         console.log(e.message[1].text.toString().split(' '))
+        if (e.message[1].text.toString().split(' ')[2] === '贴贴') {
+          let msg
+          msg = (Math.random() > 0.5)? '贴贴' :'你事一个一个一个啊啊啊啊啊啊啊'
+          
+        }
+        if (e.message[1].text.toString().split(' ').length !== 2) return
         const order = e.message[1].text.toString().split(' ')[1] || ''
         let msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（'
         switch (order) {
+          //@ts-ignore
+          case ' ':
+            return
           case 'getversion':
-            msg = 'chibot version v0.1-alpha. Customize for ' + config.group_name
+            msg = 'chibot version v0.1. Customize for ' + config.group_name
             break
           case 'homo':
             msg = '1145141919810'
@@ -40,7 +133,7 @@ client.on('message.group', async (e) => {
             msg = 'cr,nmsmshsa'
             break
           case 'help':
-            msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\nyddquotes:ydd大佬语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n贴贴:模仿柏园猫猫和猫猫bot(?\n只要@chibot输入命令即可食用（\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
+            msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\nyddquotes:ydd大佬语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n贴贴:模仿柏园猫猫和猫猫bot(?\n只要@chibot输入命令即可食用（\n附加功能：\nQQ号外获取信息和发送信息：\n私聊chibot输入passwordhelp获取更多详情\n公开API URL: chibotapi.apps.chicdn.cn\n GET /sendMsg?sender=你的QQ号&message=发送消息&pwd=你私聊设置的密码&groupid=你需要发送的群号(目前支持香子兰以及另外一个群)\nGET /getMsg 获取所有群消息，目前还没开鉴权(功能暂时无法使用)\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
             break
           case 'maomaoquotes':
             // maomaoquotes为防止滥用更改为100
@@ -119,6 +212,9 @@ client.on('message.group', async (e) => {
           case '贴贴':
               msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
               break
+          case '查乐数':
+              msg = '自从' + start + '以来，chi乐了' + le + '次'
+              break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
             break
@@ -133,14 +229,26 @@ client.on('message.group', async (e) => {
       }
     } else {
       if (e.raw_message.indexOf('ys') !== -1 && e.raw_message.indexOf('玩') !== -1 && e.member.user_id === config.uin_numbers.chihuo) {
-        e.group.sendMsg('@' + e.nickname + ' chihuo今天contribute了吗（\n你看人家dependabot都比你氵的勤快，还要玩ys\n发自chibot')
+        e.group.sendMsg('@' + e.nickname + ' chihuo今天contribute了吗，作业写完了吗（\n你看人家dependabot都比你氵的勤快，还要玩ys\n发自chibot')
       } // for chihuo2104 ys
+      // console.log(e.message[0])
+      if ((e.raw_message.indexOf('乐') !== -1 || (e.message[0].type === 'image' && e.message[0].file === 'd1ef847efb1e0d6a407a4a893ef893df48546-297-129.png'))&& e.member.user_id === config.uin_numbers.chihuo) {
+        le += 1
+        if (Math.random() < 0.1) {
+          e.group.sendMsg('@' + e.nickname + ' chihuo你又乐了啊，ja学了吗（猫猫：我只是希望你能够好好读书）\n发自chibot')
+          e.group.sendMsg('自从' + start + '以来，chi乐了' + le + '次')          
+        }
+      } // for chihuo2104 乐
+      if (e.raw_message.indexOf('有钱') !== -1 && e.member.user_id !== config.uin_numbers.chihuo) {
+        le += 1
+        e.group.sendMsg('@' + e.nickname + ' 您！chibot和chihuo都是没钱钱的呜呜呜\n发自chibot')
+      } // for others 有钱
       let name = ''
       const uin = e.member.user_id
       if (uin === config.uin_numbers.chihuo) {
         name = 'chihuo'
       } else if (uin === config.uin_numbers.lzy) {
-        name = 'lzy'
+        name = 'byn'
       } else if (uin === config.uin_numbers.sci) {
         name = 'sci'
       } else if (uin === config.uin_numbers.mzw) {
@@ -174,5 +282,46 @@ client.on('message.group', async (e) => {
         e.group.sendMsg('ydd大佬，您太巨了!\n发自chibot')
       }
     }
+  }
+  if (e.group.group_id === config.group_number2) {
+    if (e.atme === true) {
+      e.group.sendMsg('@' + e.nickname + ' 开发中...')
+    }
+  }
+})
+// setTimeout(() => {
+//   client.pickUser(2891004705).getSimpleInfo
+// }, 60000) //check online status
+
+client.on('message.private', (e) => {
+  if (e.raw_message.includes('setpassword')) {
+    if (e.raw_message.split(' ').length !== 2) {
+      e.reply('你还没有输入密码！')
+    } else {
+      try {
+        db.all('SELECT * FROM pwds WHERE uid =' + e.sender.user_id, (err, rows) => {
+          if (!err) {
+            if (rows.length === 0 ) {
+              db.run('INSERT INTO pwds VALUES (' + e.sender.user_id + ',"' + e.raw_message.split(' ')[1] + '")', (err) => {
+                if (!err) {
+                  e.reply('密码设置成功！')
+                } else throw err
+              })
+            } else {
+              db.run('UPDATE pwds SET pwd = "' + e.raw_message.split(' ')[1] + '" WHERE uid = ' + e.sender.user_id, (err) => {
+                if (!err) {
+                  e.reply('密码设置成功！')
+                } else throw err
+              })
+            }
+          } else throw err
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+  if (e.raw_message.includes('passwordhelp')) {
+    e.reply('密码设置请使用 setpassword [您密码的sha256形式]')
   }
 })
