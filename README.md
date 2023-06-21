@@ -2,10 +2,20 @@
 
 customize for 香子兰
 
-由于某些原因，暂时不公布config.ts,payforbaiyuanneko.png和maomaoquotes.ts。
+# config.ts
+
+```javascript
+export default {
+  qqnumber: 11111,
+  platform: 6,
+  QWEATHER_KEY: '2333',
+  listen_port: 7777,
+  password: 'passw0rd',
+  group_number: 222222,
+  group_name: 'smgroup'
+}
+```
 
 ## LICENSES
 
-maomaoquotes.ts,payforbaiyuanneko.png和config.ts暂时闭源
-
-其它代码遵循GPL-3.0开源协议。
+遵循GPL-3.0开源协议。
