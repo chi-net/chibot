@@ -3,13 +3,13 @@ import config from './config'
 import express from 'express'
 import sqlite3 from 'sqlite3'
 import sha256 from 'sha256'
-import { createClient, segment } from 'oicq'
+import { createClient, segment } from 'icqq'
 
 const db = new sqlite3.Database('./chibotapp.db')
 
 const app = express()
 
-const client = createClient(config.qqnumber, { platform: config.platform })
+const client = createClient({ platform: config.platform })
 
 const QWEATHER_KEY = config.QWEATHER_KEY
 
@@ -62,14 +62,14 @@ client.on("system.login.device", () => {
   })
 })
 
-client.login(config.password)
+client.login(config.qqnumber, config.password)
 
-import maomao_quotes from './maomaoquotes'
+// import maomao_quotes from './maomaoquotes'
 import yddquotes from './yddquotes'
-import maomaoquotesplus from './quotes/maomaoquotes'
-import chiquotes from './quotes/chiquotes'
-import sciquotes from './quotes/sciquotes'
-import vanillaquotes from './quotes/vanillaquotes'
+// import maomaoquotesplus from './quotes/maomaoquotes'
+// import chiquotes from './quotes/chiquotes'
+// import sciquotes from './quotes/sciquotes'
+// import vanillaquotes from './quotes/vanillaquotes'
 
 // let mq = ''
 // maomao_quotes.forEach(quote => mq += quote + ' ')
@@ -93,28 +93,28 @@ client.on('message.group', async (e) => {
   if (e.group.group_id === config.group_number) { // 香子兰定制
     // const mynickname = (await e.group.getMemberMap(true)).get(client.uin)
     // chi：小东西
-    const GS = Math.random()
-    if (GS < 0.006) {
-      e.group.sendMsg(e.message)
-    }
-    if (GS > 0.006 && GS < 0.012) {
-      e.group.sendMsg([segment.at(config.uin_numbers.bots[0] , 'ATRIbot', false), ' 贴贴']))
-      // e.group.sendMsg('可惜大家都说我SPAM和ABUSE 都不给我贴 呜呜呜')
-    }
-    if (GS > 0.0120 && GS < 0.0126) {
-      e.group.sendMsg('猫猫:')
-    }
+    // const GS = Math.random()
+    // if (GS < 0.006) {
+    //   e.group.sendMsg(e.message)
+    // }
+    // if (GS > 0.006 && GS < 0.012) {
+    //   e.group.sendMsg([segment.at(config.uin_numbers.bots[0] , 'ATRIbot', false), ' 贴贴']))
+    //   // e.group.sendMsg('可惜大家都说我SPAM和ABUSE 都不给我贴 呜呜呜')
+    // }
+    // if (GS > 0.0120 && GS < 0.0126) {
+    //   e.group.sendMsg('猫猫:')
+    // }
     if (e.atme === true) {
       // if (e.sender.user_id === config.uin_numbers.bots[0] || e.sender.user_id === config.uin_numbers.bots[1] || e.sender.user_id === config.uin_numbers.bots[2]) return
       try {
         //@ts-ignore
         console.log(e.message[1].text.toString().split(' '))
-        if (e.message[1].text.toString().split(' ')[2] === '贴贴') {
-          let msg
-          msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
-          e.group.sendMsg([segment.at(config.uin_numbers.bots[0] , 'ATRIbot', false), ' ' + msg])
-          return
-        }
+        // if (e.message[1].text.toString().split(' ')[2] === '贴贴') {
+        //   let msg
+        //   msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
+        //   e.group.sendMsg([segment.at(config.uin_numbers.bots[0] , 'ATRIbot', false), ' ' + msg])
+        //   return
+        // }
         if (e.message[1].text.toString().split(' ').length !== 2 && e.message[1].text.toString().split(' ').length !== 3) return
         if (e.message[1].text.toString().split(' ')[2] === '') return
         const order = e.message[1].text.toString().split(' ')[1] || ''
@@ -143,6 +143,7 @@ client.on('message.group', async (e) => {
             msg = `
 帮助:\n
 getversion:获取版本信息\n
+(以下功能不能使用)
 查乐数/chi乐了几次(这个不需要@bot):\n
 chiquotes:\n
 sciquotes:\n
@@ -166,8 +167,8 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
             //  const id = (e.sender.user_id === config.uin_numbers.chihuo) ? Math.floor(Math.random() * maomao_quotes.length) : Math.floor(Math.random() * 100)
             // const id =  Math.floor(Math.random() * 100)
             // 看在猫猫private feed和语音合成模型都没开源的情况下还是开猫猫语录全访问权（
-            const id = Math.floor(Math.random() * maomao_quotes.length)
-            msg = '#' + (id + 1) + ':'+ maomao_quotes[id]
+            // const id = Math.floor(Math.random() * maomao_quotes.length)
+            // msg = '#' + (id + 1) + ':'+ maomao_quotes[id]
             break
           case 'yddquotes':
             const id2 = Math.floor(Math.random() * yddquotes.length)
@@ -186,6 +187,7 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
             break
           case 'getcityid':
             try {
+              //@ts-ignore
               const city = e.message[1].text.toString().split(' ')[2]
               const res = await axios.get('https://geoapi.qweather.com/v2/city/lookup?key=' + QWEATHER_KEY + '&location=' + encodeURI(city))
               if (res.data.code === 404) {
@@ -203,6 +205,7 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
             break
           case 'getcurrentweather':
             try {
+              //@ts-ignore
               const cityid = e.message[1].text.toString().split(' ')[2]
               const res1 = await axios.get('https://geoapi.qweather.com/v2/city/lookup?key=' + QWEATHER_KEY + '&location=' + encodeURI(cityid)) // 获取cityname
               console.log(res1.data)
@@ -222,9 +225,9 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
             break
           case 'getmaomaosesepic':
             try {
-              const res = await axios.post(config.maomao_server)
+              // const res = await axios.post(config.maomao_server)
               // console.log(res)
-              msg = '嘿嘿 喵喵\n' + config.maomao_baseurl + encodeURI(res.data.files[Math.floor(Math.random() * res.data.files.length)].name)
+              // msg = '嘿嘿 喵喵\n' + config.maomao_baseurl + encodeURI(res.data.files[Math.floor(Math.random() * res.data.files.length)].name)
             } catch (e) {
               msg = '发送请求时出现错误！'
             }
@@ -238,24 +241,24 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
           case '贴贴':
               msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
               break
-          case '查乐数':
-              msg = '自从' + start + '以来，chi乐了' + le + '次'
-              break
-          case 'nekomaoquotes':
-            const id3 = Math.floor(Math.random() * maomaoquotesplus.length)
-            msg = '#' + (id3 + 1) + ':'+ maomaoquotesplus[id3]
-            break
-          case 'chiquotes':
-            const id4 = Math.floor(Math.random() * chiquotes.length)
-            msg = '#' + (id4 + 1) + ':'+ chiquotes[id4]
-            break
-          case 'sciquotes':
-            const id5 = Math.floor(Math.random() * sciquotes.length)
-            msg = '#' + (id5 + 1) + ':'+ sciquotes[id5]
-            break
-          case 'vanillaquotes':
-            const id6 = Math.floor(Math.random() * vanillaquotes.length)
-            msg = '#' + (id6 + 1) + ':'+ vanillaquotes[id6]
+          // case '查乐数':
+          //     msg = '自从' + start + '以来，chi乐了' + le + '次'
+          //     break
+          // case 'nekomaoquotes':
+          //   const id3 = Math.floor(Math.random() * maomaoquotesplus.length)
+          //   msg = '#' + (id3 + 1) + ':'+ maomaoquotesplus[id3]
+          //   break
+          // case 'chiquotes':
+          //   const id4 = Math.floor(Math.random() * chiquotes.length)
+          //   msg = '#' + (id4 + 1) + ':'+ chiquotes[id4]
+          //   break
+          // case 'sciquotes':
+          //   const id5 = Math.floor(Math.random() * sciquotes.length)
+          //   msg = '#' + (id5 + 1) + ':'+ sciquotes[id5]
+          //   break
+          // case 'vanillaquotes':
+          //   const id6 = Math.floor(Math.random() * vanillaquotes.length)
+          //   msg = '#' + (id6 + 1) + ':'+ vanillaquotes[id6]
             break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
@@ -270,69 +273,69 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
         e.group.sendMsg('@' + e.nickname + ' 一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~')
       }
     } else {
-      if (e.raw_message.indexOf('ys') !== -1 && e.raw_message.indexOf('玩') !== -1 && e.member.user_id === config.uin_numbers.chihuo) {
-        e.group.sendMsg('@' + e.nickname + ' chihuo今天contribute了吗，作业写完了吗（\n你看人家dependabot都比你氵的勤快，还要玩ys\n发自chibot')
-      } // for chihuo2104 ys
-      // console.log(e.message[0])
-      if ((e.raw_message.indexOf('乐') !== -1 || (e.message[0].type === 'image' && e.message[0].file === 'd1ef847efb1e0d6a407a4a893ef893df48546-297-129.png'))&& e.member.user_id === config.uin_numbers.chihuo) {
-        le += 1
-        if (Math.random() < 0.02) {
-          e.group.sendMsg('@' + e.nickname + ' chihuo你又乐了啊，ja学了吗（猫猫：我只是希望你能够好好读书）\n发自chibot')
-          e.group.sendMsg('自从' + start + '以来，chi乐了' + le + '次')          
-        }
-      } // for chihuo2104 乐
-      if (e.raw_message === 'chi乐了几次') {
-        e.group.sendMsg('自从' + start + '以来，chi乐了' + le + '次')    
-      }
-      if (e.raw_message.indexOf('有钱') !== -1 && e.member.user_id !== config.uin_numbers.chihuo) {
-        le += 1
-        e.group.sendMsg('@' + e.nickname + ' 您！chibot和chihuo都是没钱钱的呜呜呜\n发自chibot')
-      } // for others 有钱
-      let name = ''
-      const uin = e.member.user_id
-      if (uin === config.uin_numbers.chihuo) {
-        name = 'chihuo'
-      } else if (uin === config.uin_numbers.lzy) {
-        name = 'byn'
-      } else if (uin === config.uin_numbers.sci) {
-        name = 'sci'
-      } else if (uin === config.uin_numbers.mzw) {
-        name = 'mzw'
-      } else if (uin === config.uin_numbers.maomao) {
-        name = '猫猫'
-      } else if (uin === config.uin_numbers.so1ve) {
-        name = 'so1ve'
-      } else if (uin === config.uin_numbers.bots[0] || uin === config.uin_numbers.bots[2] || uin === config.uin_numbers.bots[3] || uin === config.uin_numbers.bots[1]) {
-        return
-      } else {
-        name = e.nickname
-      }
-      if (e.raw_message.indexOf('鸟白岛') !== -1 || e.raw_message.indexOf('鳥白島') !== -1 || e.raw_message.indexOf('とりしろじま') !== -1) { // for maomao mzw lzy nbd
-        if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
-          e.group.sendMsg('@' + e.nickname + 'ydd大佬，您太巨了，竟然在玩鸟白岛')
-          return
-        }
-        e.group.sendMsg('@' + e.nickname + ' ' + name + '今天contribute了吗，还玩鸟白岛\n发自chibot')
-      }
-      if ((e.raw_message.toLowerCase().indexOf('mc') !== -1 || e.raw_message.toLowerCase().indexOf('minecraft') !== -1) && (e.raw_message.indexOf('服') !== -1 || e.raw_message.indexOf('玩') !== -1)) { // for everyone mc
-        let name = ''
-        const uin = e.member.user_id
-        if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
-          e.group.sendMsg('@' + e.nickname + 'ydd大佬，您太巨了，竟然在玩mc')
-          return
-        }
-        e.group.sendMsg('@' + e.nickname + ' ' + name + '今天contribute了吗，还玩mc\n发自chibot')
-      }
-      if((e.raw_message.indexOf('草') !== -1 || e.raw_message.indexOf('趴') !== -1) && (e.member.user_id === config.uin_numbers.ydd[0] || e.member.user_id === config.uin_numbers.ydd[1])) { // for ydd dalao
-        e.group.sendMsg('ydd大佬，您太巨了!\n发自chibot')
-      }
+      // if (e.raw_message.indexOf('ys') !== -1 && e.raw_message.indexOf('玩') !== -1 && e.member.user_id === config.uin_numbers.chihuo) {
+      //   e.group.sendMsg('@' + e.nickname + ' chihuo今天contribute了吗，作业写完了吗（\n你看人家dependabot都比你氵的勤快，还要玩ys\n发自chibot')
+      // } // for chihuo2104 ys
+      // // console.log(e.message[0])
+      // if ((e.raw_message.indexOf('乐') !== -1 || (e.message[0].type === 'image' && e.message[0].file === 'd1ef847efb1e0d6a407a4a893ef893df48546-297-129.png'))&& e.member.user_id === config.uin_numbers.chihuo) {
+      //   le += 1
+      //   if (Math.random() < 0.02) {
+      //     e.group.sendMsg('@' + e.nickname + ' chihuo你又乐了啊，ja学了吗（猫猫：我只是希望你能够好好读书）\n发自chibot')
+      //     e.group.sendMsg('自从' + start + '以来，chi乐了' + le + '次')          
+      //   }
+      // } // for chihuo2104 乐
+      // // if (e.raw_message === 'chi乐了几次') {
+      //   // e.group.sendMsg('自从' + start + '以来，chi乐了' + le + '次')    
+      // // }
+      // // if (e.raw_message.indexOf('有钱') !== -1 && e.member.user_id !== config.uin_numbers.chihuo) {
+      //   le += 1
+      //   e.group.sendMsg('@' + e.nickname + ' 您！chibot和chihuo都是没钱钱的呜呜呜\n发自chibot')
+      // } // for others 有钱
+      // let name = ''
+      // const uin = e.member.user_id
+      // if (uin === config.uin_numbers.chihuo) {
+      //   name = 'chihuo'
+      // } else if (uin === config.uin_numbers.lzy) {
+      //   name = 'byn'
+      // } else if (uin === config.uin_numbers.sci) {
+      //   name = 'sci'
+      // } else if (uin === config.uin_numbers.mzw) {
+      //   name = 'mzw'
+      // } else if (uin === config.uin_numbers.maomao) {
+      //   name = '猫猫'
+      // } else if (uin === config.uin_numbers.so1ve) {
+      //   name = 'so1ve'
+      // } else if (uin === config.uin_numbers.bots[0] || uin === config.uin_numbers.bots[2] || uin === config.uin_numbers.bots[3] || uin === config.uin_numbers.bots[1]) {
+      //   return
+      // } else {
+      //   name = e.nickname
+      // }
+      // if (e.raw_message.indexOf('鸟白岛') !== -1 || e.raw_message.indexOf('鳥白島') !== -1 || e.raw_message.indexOf('とりしろじま') !== -1) { // for maomao mzw lzy nbd
+      //   if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
+      //     e.group.sendMsg('@' + e.nickname + 'ydd大佬，您太巨了，竟然在玩鸟白岛')
+      //     return
+      //   }
+      //   e.group.sendMsg('@' + e.nickname + ' ' + name + '今天contribute了吗，还玩鸟白岛\n发自chibot')
+      // }
+      // if ((e.raw_message.toLowerCase().indexOf('mc') !== -1 || e.raw_message.toLowerCase().indexOf('minecraft') !== -1) && (e.raw_message.indexOf('服') !== -1 || e.raw_message.indexOf('玩') !== -1)) { // for everyone mc
+      //   let name = ''
+      //   const uin = e.member.user_id
+      //   if (uin ===  config.uin_numbers.ydd[0] || uin === config.uin_numbers.ydd[1]) {
+      //     e.group.sendMsg('@' + e.nickname + 'ydd大佬，您太巨了，竟然在玩mc')
+      //     return
+      //   }
+      //   e.group.sendMsg('@' + e.nickname + ' ' + name + '今天contribute了吗，还玩mc\n发自chibot')
+      // }
+      // if((e.raw_message.indexOf('草') !== -1 || e.raw_message.indexOf('趴') !== -1) && (e.member.user_id === config.uin_numbers.ydd[0] || e.member.user_id === config.uin_numbers.ydd[1])) { // for ydd dalao
+      //   e.group.sendMsg('ydd大佬，您太巨了!\n发自chibot')
+      // }
     }
   }
-  if (e.group.group_id === config.group_number2) {
-    if (e.atme === true) {
-      e.group.sendMsg('@' + e.nickname + ' 开发中...')
-    }
-  }
+  // if (e.group.group_id === config.group_number2) {
+  //   if (e.atme === true) {
+  //     e.group.sendMsg('@' + e.nickname + ' 开发中...')
+  //   }
+  // }
 })
 // setTimeout(() => {
 //   client.pickUser(2891004705).getSimpleInfo
