@@ -66,18 +66,8 @@ client.login(config.qqnumber, config.password)
 
 import maomao_quotes from './maomaoquotes'
 import yddquotes from './yddquotes'
-// import maomaoquotesplus from './quotes/maomaoquotes'
-// import chiquotes from './quotes/chiquotes'
-// import sciquotes from './quotes/sciquotes'
-// import vanillaquotes from './quotes/vanillaquotes'
-
-// let mq = ''
-// maomao_quotes.forEach(quote => mq += quote + ' ')
-// console.log(mq)
 
 client.on('system.online', async () => {
-  // client.sendGroupMsg(983538695, ([segment.at(1945872835 , 'ATRIbot', false), ' 贴贴']))
-  // client.sendGroupMsg(983538695, ([segment.at(2501157389 , '零れ桜', false), ' ' + ' 贴贴']))
 })
 
 client.on('message.group', async (e) => {
@@ -93,28 +83,21 @@ client.on('message.group', async (e) => {
   if (e.group.group_id === config.group_number) { // 香子兰定制
     // const mynickname = (await e.group.getMemberMap(true)).get(client.uin)
     // chi：小东西
-    // const GS = Math.random()
-    // if (GS < 0.006) {
-    //   e.group.sendMsg(e.message)
-    // }
+    const GS = Math.random()
+    if (GS < 0.006) {
+      e.group.sendMsg(e.message)
+    }
     // if (GS > 0.006 && GS < 0.012) {
     //   e.group.sendMsg([segment.at(config.uin_numbers.bots[0] , 'ATRIbot', false), ' 贴贴']))
     //   // e.group.sendMsg('可惜大家都说我SPAM和ABUSE 都不给我贴 呜呜呜')
     // }
-    // if (GS > 0.0120 && GS < 0.0126) {
-    //   e.group.sendMsg('猫猫:')
-    // }
+    if (GS > 0.0120 && GS < 0.0126) {
+      e.group.sendMsg('猫猫:')
+    }
     if (e.atme === true) {
-      // if (e.sender.user_id === config.uin_numbers.bots[0] || e.sender.user_id === config.uin_numbers.bots[1] || e.sender.user_id === config.uin_numbers.bots[2]) return
       try {
         //@ts-ignore
         console.log(e.message[1].text.toString().split(' '))
-        // if (e.message[1].text.toString().split(' ')[2] === '贴贴') {
-        //   let msg
-        //   msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
-        //   e.group.sendMsg([segment.at(config.uin_numbers.bots[0] , 'ATRIbot', false), ' ' + msg])
-        //   return
-        // }
         if (e.message[1].text.toString().split(' ').length !== 2 && e.message[1].text.toString().split(' ').length !== 3) return
         if (e.message[1].text.toString().split(' ')[2] === '') return
         const order = e.message[1].text.toString().split(' ')[1] || ''
@@ -139,32 +122,23 @@ client.on('message.group', async (e) => {
             msg = 'cr,nmsmshsa'
             break
           case 'help':
-            // msg = '帮助:\nhomo:你懂的\ngetversion:获取chibot版本信息\ngetcurrentunixtime:获取当前unix时间戳\ngetcurrenttime:获取当时时间\nmaomaoquotes:(高科技)猫猫语录\nyddquotes:ydd大佬语录\ncrnmsl:赞美陈睿叔叔\ngeturl (URL):获取一个URL地址的数据\ngetcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\ngetcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\ngetmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\nbaiyuannekoshelp:救救柏园猫猫(x\n贴贴:模仿柏园猫猫和猫猫bot(?\n只要@chibot输入命令即可食用（\n附加功能：\nQQ号外获取信息和发送信息：\n私聊chibot输入passwordhelp获取更多详情\n公开API URL: chibotapi.apps.chicdn.cn\n GET /sendMsg?sender=你的QQ号&message=发送消息&pwd=你私聊设置的密码&groupid=你需要发送的群号(目前支持香子兰以及另外一个群)\nGET /getMsg 获取所有群消息，目前还没开鉴权(功能暂时无法使用)\n部分代码已经开源于Github，欢迎star（\n地址: https://github.com/chi-net/chibot'
             msg = `
-帮助:\n
-getversion:获取版本信息\n
-(以下功能不能使用)
-查乐数/chi乐了几次(这个不需要@bot):\n
-chiquotes:\n
-sciquotes:\n
-vanillaquotes:\n
-maomaoquotes:(高科技)猫猫语录\n
-nekomaoquotes:(高科技)猫猫语录Plus\n
-yddquotes:ydd大佬语录\n
-crnmsl:赞美陈睿叔叔\n
-geturl (URL):获取一个URL地址的数据\n
-getcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)\n
-getcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)\n
-getmaomaosesepic:获取(高科技)猫猫网盘中的涩图(二次元美图)\n
-baiyuannekoshelp:救救柏园猫猫罢(x\n
-贴贴:模仿柏园猫猫和猫猫bot(? 只要@chibot输入命令即可食用（\n
-部分代码已经开源于Github，欢迎star（\n
+帮助:
+getversion:获取版本信息
+maomaoquotes:猫猫语录
+yddquotes:ydd大佬语录
+crnmsl:赞美陈睿叔叔
+homo: yaj55 s1npai!
+m$nm$l: 微小软件害人不浅
+getcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查询)
+getcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)
+getmaomaosesepic:获取猫猫网盘中的涩图(二次元美图)
+贴贴:模仿柏园猫猫和猫猫bot(? 只要@chibot输入命令即可食用（
+部分代码已经开源于Github，欢迎star（
 地址: https://github.com/chi-net/chibot
 `
             break
           case 'maomaoquotes':
-            // maomaoquotes为防止滥用更改为100
-            //  const id = (e.sender.user_id === config.uin_numbers.chihuo) ? Math.floor(Math.random() * maomao_quotes.length) : Math.floor(Math.random() * 100)
             const id =  Math.floor(Math.random() * 100)
             // 看在猫猫private feed和语音合成模型都没开源的情况下还是开猫猫语录全访问权（
             // const id = Math.floor(Math.random() * maomao_quotes.length)
@@ -228,38 +202,17 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
               // const res = await axios.post(config.maomao_server)
               // console.log(res)
               // msg = '嘿嘿 喵喵\n' + config.maomao_baseurl + encodeURI(res.data.files[Math.floor(Math.random() * res.data.files.length)].name)
+              msg = '本功能暂时无法使用'
             } catch (e) {
               msg = '发送请求时出现错误！'
             }
             break
-          case 'baiyuannekoshelp':
-              msg = '我是柏园猫，现在被高科技猫猫绑架，现在v下面这个二维码50，救我出来，等我出来一定让你当baiyuan works设计总监（x\n救救chihuo罢(bushi)\n'
-              const str = '@' + e.nickname + ' ' + msg
-              const res = await e.group.sendMsg([str , segment.image('payforbaiyuanneko.png')])
-              console.log(res)
-              break
           case '贴贴':
               msg = (Math.random() > 0.5)? '贴贴' :'(逃走)'
               break
-          // case '查乐数':
-          //     msg = '自从' + start + '以来，chi乐了' + le + '次'
-          //     break
-          // case 'nekomaoquotes':
-          //   const id3 = Math.floor(Math.random() * maomaoquotesplus.length)
-          //   msg = '#' + (id3 + 1) + ':'+ maomaoquotesplus[id3]
-          //   break
-          // case 'chiquotes':
-          //   const id4 = Math.floor(Math.random() * chiquotes.length)
-          //   msg = '#' + (id4 + 1) + ':'+ chiquotes[id4]
-          //   break
-          // case 'sciquotes':
-          //   const id5 = Math.floor(Math.random() * sciquotes.length)
-          //   msg = '#' + (id5 + 1) + ':'+ sciquotes[id5]
-          //   break
-          // case 'vanillaquotes':
-          //   const id6 = Math.floor(Math.random() * vanillaquotes.length)
-          //   msg = '#' + (id6 + 1) + ':'+ vanillaquotes[id6]
-            break
+          case 'm$nm$l':
+              msg = '微 小 软 件 n m $ l'
+              break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
             break
@@ -331,16 +284,7 @@ baiyuannekoshelp:救救柏园猫猫罢(x\n
       // }
     }
   }
-  // if (e.group.group_id === config.group_number2) {
-  //   if (e.atme === true) {
-  //     e.group.sendMsg('@' + e.nickname + ' 开发中...')
-  //   }
-  // }
 })
-// setTimeout(() => {
-//   client.pickUser(2891004705).getSimpleInfo
-// }, 60000) //check online status
-
 client.on('message.private', (e) => {
   if (e.raw_message.includes('setpassword')) {
     if (e.raw_message.split(' ').length !== 2) {
