@@ -396,5 +396,6 @@ export default [
   "@666999HC 恭喜你完成了",
   "@666999HC 那就 get started 吧",
   "@mikehay 其实加钱都能搞定",
-  "sci: feat(fxtz): auto play bot"
+  "sci: feat(fxtz): auto play bot",
+  "chi你又在爬我域名然后搞混一些东西"
 ]

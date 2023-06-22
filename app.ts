@@ -66,6 +66,9 @@ client.login(config.qqnumber, config.password)
 
 import maomao_quotes from './maomaoquotes'
 import yddquotes from './yddquotes'
+import chuang from './chuang'
+import { Sendable, MessageElem } from 'icqq'
+// import { group } from 'console'
 
 client.on('system.online', async () => {
 })
@@ -101,7 +104,7 @@ client.on('message.group', async (e) => {
         if (e.message[1].text.toString().split(' ').length !== 2 && e.message[1].text.toString().split(' ').length !== 3) return
         if (e.message[1].text.toString().split(' ')[2] === '') return
         const order = e.message[1].text.toString().split(' ')[1] || ''
-        let msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（'
+        let msg:Sendable = '一个还没有实装命令功能的bot你@它干嘛，屑透了（'
         switch (order) {
           //@ts-ignore
           case ' ':
@@ -134,14 +137,17 @@ getcityid (cityname):使用和风天气api获取一个城市的ID(可模糊查�
 getcurrentweather (city/cityid):使用和风天气API获取cityid对应的城市当前天气(模糊查询默认显示第一个天气情况)
 getmaomaosesepic:获取猫猫网盘中的涩图(二次元美图)
 贴贴:模仿柏园猫猫和猫猫bot(? 只要@chibot输入命令即可食用（
+WIP部分：
+authenation 基于nahida-web(chiOpenID a.k.a 赤网通行证)的验证 输入您看到的验证码即可（仅私聊）
+chuang 一起开创创卡车罢！
 部分代码已经开源于Github，欢迎star（
 地址: https://github.com/chi-net/chibot
 `
             break
           case 'maomaoquotes':
-            const id =  Math.floor(Math.random() * 100)
+            // const id =  Math.floor(Math.random() * 100)
             // 看在猫猫private feed和语音合成模型都没开源的情况下还是开猫猫语录全访问权（
-            // const id = Math.floor(Math.random() * maomao_quotes.length)
+            const id = Math.floor(Math.random() * maomao_quotes.length)
             msg = '#' + (id + 1) + ':'+ maomao_quotes[id]
             break
           case 'yddquotes':
@@ -212,6 +218,13 @@ getmaomaosesepic:获取猫猫网盘中的涩图(二次元美图)
               break
           case 'm$nm$l':
               msg = '微 小 软 件 n m $ l'
+              break
+          case 'chuang':
+              const idn = Math.floor(Math.random() * chuang.length)
+              //@ts-ignore
+              let a:MessageElem[] = ['今天你适合开的创创卡车是：' + chuang[idn].name]
+              e.group.sendMsg(segment.image('./chuang/' + chuang[idn].img))
+              msg = a
               break
           case '':
             msg = '一个还没有实装命令功能的bot你@它干嘛，屑透了（\n可以@chibot help来查看命令列表~'
